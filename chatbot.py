@@ -12,7 +12,7 @@ directory = "speeches"
 files_names = list_of_files(directory, "txt")
 print(files_names)
 
-
+print("Raphael est trop chaud en python")
 
 # def pretraitement(fichier):
 #     for i in
