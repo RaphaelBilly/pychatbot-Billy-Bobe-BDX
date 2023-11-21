@@ -30,10 +30,19 @@ def extraire_nom(files_names):
     print(liste_nom_president)
     return liste_nom_president
 
+#print(extraire_nom(files_names))
 
+def association_nom_prenom(nom_president):
+    noms_prenoms = {"Chirac" : "Jacques",
+                "Giscard dEstaing" : "Valery",
+                "Hollande" : "François",
+                "Macron" : "Emmanuel",
+                "Mitterrand" : "François",
+                "Sarkozy" : "Nicolas"}
 
-print(extraire_nom(files_names))
-
+    prenom = noms_prenoms[nom_president]
+    return prenom
+#print(association_nom_prenom("Chirac"))
 
 
 
