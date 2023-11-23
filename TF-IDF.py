@@ -14,7 +14,7 @@ def TF_calculator(chaine_de_caractere):
 def IDF_calculator(directory):
     dic = {}
     for files in directory :
-
+        pass
 
 if __name__ == "__main__":
     print(TF_calculator(
