@@ -10,7 +10,6 @@ def list_of_files(directory, extension):
 
 directory = "./speeches"
 files_names = list_of_files(directory, "txt")
-print(files_names)
 
 def extraire_nom(files_names):
     liste_nom_president = []
@@ -27,12 +26,11 @@ def extraire_nom(files_names):
     for i in range (len(files_names)):
         if files_names[i] not in liste_nom_president:
             liste_nom_president.append(files_names[i])
-    print(liste_nom_president)
     return liste_nom_president
 
 #print(extraire_nom(files_names))
 
-def association_nom_prenom(nom_president):
+def association_nom_prenom(liste_nom_president):
     noms_prenoms = {"Chirac" : "Jacques",
                 "Giscard dEstaing" : "Valery",
                 "Hollande" : "François",
@@ -40,9 +38,17 @@ def association_nom_prenom(nom_president):
                 "Mitterrand" : "François",
                 "Sarkozy" : "Nicolas"}
 
-    prenom = noms_prenoms[nom_president]
-    return prenom
-#print(association_nom_prenom("Chirac"))
+    Liste_nom_prenom = []
+    for name in liste_nom_president:
+        Liste_nom_prenom.append(noms_prenoms[name] + " " + name)
+    return Liste_nom_prenom
+
+#print(association_nom_prenom(extraire_nom(files_names)))
+
+
+
+
+
 
 
 
