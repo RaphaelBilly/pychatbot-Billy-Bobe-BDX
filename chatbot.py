@@ -46,9 +46,18 @@ def association_nom_prenom(liste_nom_president):
 #print(association_nom_prenom(extraire_nom(files_names)))
 
 
+cleaned_directory = os.path.join(os.path.dirname(directory), "cleaned")
+os.makedirs(cleaned_directory, exist_ok=True)
 
+def clean_punctuation():
+    for file in files_names:
+        fichier = open("./speeches/" + file, "r")
+        # lire le fichier ligne par ligne
+        lignes = fichier.readlines()
+        # boucler pour chaque ligne
+        #for line in lignes:
 
-
+clean_punctuation()
 
 
 
