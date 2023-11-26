@@ -5,7 +5,7 @@ from chatbot import list_of_files
 
 def list_of_words(file):
     liste = []
-    fichier = open("./cleaned/" + file , "r")
+    fichier = open("./cleaned/" + file, "r")
     lines = fichier.readlines()
     for line in lines:
         line = line.split(" ")
@@ -14,13 +14,14 @@ def list_of_words(file):
                 liste.append(word)
     return liste
 
+
 def TF_calculator(file):
     dic = {}
     fichier = open("./cleaned/" + file, "r")
     lines = fichier.readlines()
     for line in lines:
         line = line.split(" ")
-        for word in line :
+        for word in line:
             if word not in dic.keys():
                 dic[word] = 1
             else:
@@ -62,7 +63,7 @@ def TF_IDF_calculator(directory):
             if word in list_of_words(file):
                 TF_scores = TF_calculator(file)
                 word_TF_score = TF_scores[word]
-            else :
+            else:
                 word_TF_score = 0
             word_IDF_score = IDF_scores[word]
             word_TFIDF_score = word_TF_score * word_IDF_score
@@ -71,6 +72,36 @@ def TF_IDF_calculator(directory):
     return matrice, final_list
 
 
+def mots_pas_importants(matriceTF_IDF):
+    newmatrice = matriceTF_IDF[0]
+    liste_des_mots = matriceTF_IDF[1]
+    nombre_de_textes = len(newmatrice[0])
+    score_nul = [0] * nombre_de_textes
+    liste_des_mots_pas_importants = []
+    for i in range(len(newmatrice)):
+        if newmatrice[i] == score_nul:
+            liste_des_mots_pas_importants.append(liste_des_mots[i])
+    return liste_des_mots_pas_importants
+
+
+def mots_importants(matriceTF_IDF):
+    newmatrice = matriceTF_IDF[0]
+    liste_des_mots = matriceTF_IDF[1]
+    liste_des_mots_importants = newmatrice[0]
+    max = 0
+    for valeur in newmatrice[0]:
+        max += valeur
+    for i in range(len(newmatrice)):
+        somme = 0
+        for valeur in newmatrice[i]:
+            somme += valeur
+        if somme == max:
+            liste_des_mots_importants.append(liste_des_mots[i])
+        elif somme > max:
+            max = somme
+            liste_des_mots_importants = [liste_des_mots[i]]
+    return liste_des_mots_importants
+
+
 if __name__ == "__main__":
     pass
-
