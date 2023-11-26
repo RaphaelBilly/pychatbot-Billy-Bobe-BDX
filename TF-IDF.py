@@ -1,6 +1,13 @@
 from math import log10
 import os
-from chatbot import list_of_files
+
+
+def get_list_of_files_in_directory(directory: str) -> list:
+    files_names = []
+    for filename in os.listdir(directory):
+        if filename.endswith("txt"):
+            files_names.append(filename)
+    return files_names
 
 
 def list_of_words(file):
@@ -13,6 +20,7 @@ def list_of_words(file):
             if word not in liste:
                 liste.append(word)
     return liste
+
 
 def TF_calculator(file):
     dic = {}
@@ -33,7 +41,7 @@ def TF_calculator(file):
 
 def IDF_calculator(directory):
     dic = {}
-    files_names = list_of_files(directory, "txt")
+    files_names = get_list_of_files_in_directory(directory)
     number_of_files = len(files_names)
     for file in files_names:
         list_of_all_words = list_of_words(file)
@@ -50,7 +58,7 @@ def IDF_calculator(directory):
 
 
 def TF_IDF_calculator(directory):
-    files_names = list_of_files(directory, "txt")
+    files_names = get_list_of_files_in_directory(directory)
     matrice = []
     IDF_scores = IDF_calculator(directory)
     list_of_all_words = IDF_scores.keys()
