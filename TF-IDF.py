@@ -1,13 +1,5 @@
 from math import log10
-import os
-
-
-def get_list_of_files_in_directory(directory: str) -> list:
-    files_names = []
-    for filename in os.listdir(directory):
-        if filename.endswith("txt"):
-            files_names.append(filename)
-    return files_names
+from common import get_list_of_files_in_directory
 
 
 def list_of_words(file):

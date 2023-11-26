@@ -1,4 +1,4 @@
-from chatbot import *
+from common import get_list_of_files_in_directory
 
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+files_names = get_list_of_files_in_directory("./speeches")

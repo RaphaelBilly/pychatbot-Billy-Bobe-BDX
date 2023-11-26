@@ -1,17 +1,8 @@
-import os
 import re
+from common import get_list_of_files_in_directory
 
 
-def get_list_of_files_in_directory(directory: str) -> list:
-    files_names = []
-    for filename in os.listdir(directory):
-        if filename.endswith("txt"):
-            files_names.append(filename)
-    return files_names
-
-
-directory = "./speeches"
-files_names = get_list_of_files_in_directory(directory)
+files_names = get_list_of_files_in_directory("./speeches")
 
 
 def clean_text(text: str) -> str:
