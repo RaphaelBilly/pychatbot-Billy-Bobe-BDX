@@ -51,20 +51,23 @@ cleaned_directory = os.path.join(os.path.dirname(directory), "cleaned") #créati
 os.makedirs(cleaned_directory, exist_ok=True)
 
 def clean_punctuation():
-    for file in files_names:                                        #boucle for parcourant la liste des noms de fichiers
-        fichier = open("./speeches/" + file, "r")                   #ouverture des fichiers en lecture du dossier speeches
-        lignes = fichier.readlines()                                #création d'une liste contenant les lignes du fichier
-        fichier_cleaned = open("./cleaned/" + file, "w")            #création des fichiers dans le dossier cleaned en écriture
-        for ligne in lignes :                                       #boucle for parcourant les lignes du fichier
-            for i in range(len(ligne)):                             #boucle for parcourant les caractères de la ligne
-                if ligne[i] in ".?!:;,()[]{}'-":                    #si le caractère est un signe de ponctuation
-                    ligne = ligne.replace(ligne[i], " ")            #on le remplace par un espace
+    for file in files_names:
+        fichier = open("./speeches/" + file, "r")
+        lignes = fichier.readlines()
+        fichier_cleaned = open("./cleaned/" + file, "w")
+        for ligne in lignes :
+            for i in range(len(ligne)):
+                if ligne[i] in ".?!:;,()[]{}'-" and i > 0 and i < len(ligne)-1 and ligne[i-1].isalpha() and ligne[i+1].isalpha():                    #si le caractère est un signe de ponctuation
+                    ligne = ligne.replace(ligne[i], " ")
+                elif ligne[i] in ".?!:;,()[]{}'-" :
+                    ligne = ligne.replace(ligne[i], " ")
+
+
             fichier_cleaned.write(ligne)                            #on écrit la ligne dans le fichier
         fichier.close()                                             #fermeture des fichiers
         fichier_cleaned.close()
 
         #CODE DE LA FONCTION A AMELIORER CAR ELLE MET 2 ESPACES A LA SUITE SI UNE VIRGULE EST SUPPRIMEE OU ENCORE
-        # Faire attention en corrigeant le problème du commentaire ci dessus à ne pas concaténer par exemple elle-même en ellemême
 
 
 
