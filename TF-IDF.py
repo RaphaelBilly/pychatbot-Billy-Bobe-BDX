@@ -5,7 +5,7 @@ from chatbot import list_of_files
 
 def list_of_words(file):
     liste = []
-    fichier = open("C:\\Users\\louis\\OneDrive\\Bureau\\test_du_projet\\testCleaned\\" + file , "r")
+    fichier = open("./cleaned" + file , "r")
     lines = fichier.readlines()
     for line in lines:
         line = line.split(" ")
@@ -16,7 +16,7 @@ def list_of_words(file):
 
 def TF_calculator(file):
     dic = {}
-    fichier = open("C:\\Users\\louis\\OneDrive\\Bureau\\test_du_projet\\testCleaned\\" + file, "r")
+    fichier = open("./cleaned" + file, "r")
     lines = fichier.readlines()
     for line in lines:
         line = line.split(" ")
