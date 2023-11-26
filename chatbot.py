@@ -1,5 +1,4 @@
 import os
-
 #Récupère les noms des fichiers contenants les discours
 def list_of_files(directory, extension):
     files_names = []
@@ -56,27 +55,36 @@ def clean_punctuation():
         lignes = fichier.readlines()
         fichier_cleaned = open("./cleaned/" + file, "w")
         for ligne in lignes :
+            ligne = ligne.replace("\n", " ")
             for i in range(len(ligne)):
-                if ligne[i] in ".?!:;,()[]{}'-" and i > 0 and i < len(ligne)-1 and ligne[i-1].isalpha() and ligne[i+1].isalpha():                    #si le caractère est un signe de ponctuation
+                if ligne[i] in ".?!:;,()[]{}'-" and ligne[i - 1].isalpha() and ligne[i + 1].isalpha():
                     ligne = ligne.replace(ligne[i], " ")
-                elif ligne[i] in ".?!:;,()[]{}'-" :
+                elif ligne[i] in ".?!:;,()[]{}'-" and ligne[i - 1].isalpha() and ligne[i + 1] == " ":
                     ligne = ligne.replace(ligne[i], " ")
-
-
-            fichier_cleaned.write(ligne)                            #on écrit la ligne dans le fichier
-        fichier.close()                                             #fermeture des fichiers
+                elif ligne[i] in ".?!:;,()[]{}'-":
+                    ligne = ligne.replace(ligne[i], " ")
+            for i in range(len(ligne)):
+                if ligne[i] == " " and ligne[i + 1] == " ":
+                    ligne = ligne.replace(ligne[i], "")
+            fichier_cleaned.write(ligne)
+        fichier.close()
         fichier_cleaned.close()
-
-        #CODE DE LA FONCTION A AMELIORER CAR ELLE MET 2 ESPACES A LA SUITE SI UNE VIRGULE EST SUPPRIMEE OU ENCORE
-
-
-
-
 clean_punctuation()
 
 
+def lower_case():
+    for file in files_names:
+        fichier = open("./cleaned/" + file, "r", encoding="utf-8")
+        lignes = fichier.readlines()
+        fichier_lower = open("./cleaned/" + file, "w", encoding="utf-8")
+        for ligne in lignes:
+            ligne = ligne.lower()
+            fichier_lower.write(ligne)
+        fichier.close()
+        fichier_lower.close()
+lower_case()
 
-
+# fait une fonction qui ne laisse qu'un espace entre les mots et faire attention car parfois il peut y avoir plus de deux espaces collés
 
 
 
