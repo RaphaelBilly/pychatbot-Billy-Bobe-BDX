@@ -20,7 +20,7 @@ def TF_calculator(file):
     lines = fichier.readlines()
     for line in lines:
         line = line.split(" ")
-        for word in line
+        for word in line:
             if word not in dic.keys():
                 dic[word] = 1
             else:
@@ -57,7 +57,7 @@ def TF_IDF_calculator(directory):
     for word in list_of_all_words:
         word_TFIDF_scores = []
         for file in files_names:
-            TF_scores = TF_calculator(file):
+            TF_scores = TF_calculator(file)
             word_TF_score = TF_scores[word]
             word_IDF_score = IDF_scores[word]
             word_TFIDF_score = word_TF_score * word_IDF_score
