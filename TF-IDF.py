@@ -54,7 +54,9 @@ def TF_IDF_calculator(directory):
     matrice = []
     IDF_scores = IDF_calculator(directory)
     list_of_all_words = IDF_scores.keys()
+    final_list = []
     for word in list_of_all_words:
+        final_list.append(word)
         word_TFIDF_scores = []
         for file in files_names:
             if word in list_of_words(file):
@@ -66,7 +68,7 @@ def TF_IDF_calculator(directory):
             word_TFIDF_score = word_TF_score * word_IDF_score
             word_TFIDF_scores.append(word_TFIDF_score)
         matrice.append(word_TFIDF_scores)
-    return matrice, list_of_all_words
+    return matrice, final_list
 
 
 if __name__ == "__main__":
