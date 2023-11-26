@@ -67,6 +67,5 @@ def TF_IDF_calculator(directory):
 
 
 if __name__ == "__main__":
-    print(TF_calculator(
-        "il est au minimum nécessaire d’avoir  au qui le le au qui une fonction qui calcule le nombre d’occurrence de chaque mot dans un texte"))
-    directory = "./speeches"
+    pass
+
