@@ -1,8 +1,4 @@
 import re
-from common import get_list_of_files_in_directory
-
-
-files_names = get_list_of_files_in_directory("./speeches")
 
 
 def extract_president_name(files_names: list) -> list:
@@ -14,7 +10,8 @@ def extract_president_name(files_names: list) -> list:
     return list(president_names)
 
 
-def associate_president_name_with_first_name(president_names: list) -> list:
+def associate_president_name_with_first_name(files_names: list) -> list:
+    president_names = extract_president_name(files_names)
     president_names_with_first_name = []
     for president_name in president_names:
         match president_name:
