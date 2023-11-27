@@ -1,107 +1,60 @@
-from math import log10
+import math
 import os
-from chatbot import list_of_files
+
+from common import get_list_of_files_in_directory
 
 
-def list_of_words(file):
-    liste = []
-    fichier = open("./cleaned/" + file, "r")
-    lines = fichier.readlines()
-    for line in lines:
-        line = line.split(" ")
-        for word in line:
-            if word not in liste:
-                liste.append(word)
-    return liste
+def get_list_of_words(file: str) -> list:
+    file = open("./cleaned/" + file, "r", encoding="utf-8")
+    return list(set(file.read().split(" ")[:-1]))
+
+def get_term_frequency(file: str) -> dict:
+    list_of_words = get_list_of_words(file)
+    term_frequency = {}
+    fileLines = open("./cleaned/" + file, "r", encoding="utf-8").read().split(" ")
+    for word in fileLines:
+        if word not in term_frequency.keys():
+            term_frequency[word] = 1
+        else:
+            term_frequency[word] += 1
+    return term_frequency
+
+print(get_term_frequency("Nomination_Chirac1.txt"))
 
 
-def TF_calculator(file):
-    dic = {}
-    fichier = open("./cleaned/" + file, "r")
-    lines = fichier.readlines()
-    for line in lines:
-        line = line.split(" ")
-        for word in line:
-            if word not in dic.keys():
-                dic[word] = 1
+def get_inverse_document_frequency(directory: str) -> dict:
+    files_names = get_list_of_files_in_directory("./cleaned")
+    corpus_size = len(files_names)
+    document_frequency = {}
+    allWords = []
+    for i in (os.listdir(("./cleaned/"))):
+        allWords += get_list_of_words(i)
+    allWords = list(set(allWords))
+    for word in allWords:
+        for i in (os.listdir(("./cleaned/"))):
+            texte = open("./cleaned/" + i, "r", encoding="utf-8").read()
+            if word in texte:
+                if word not in document_frequency.keys():
+                    document_frequency[word] = 1
+                else:
+                    document_frequency[word] += 1
+    inverse_document_frequency = {}
+    for word in document_frequency.keys():
+        inverse_document_frequency[word] = math.log10(8 / document_frequency[word])
+    return inverse_document_frequency
+#print(get_inverse_document_frequency("./cleaned"))
+
+def get_tf_id_matrix(directory: str) -> list:
+    files_names = get_list_of_files_in_directory("./cleaned")
+    tf_id_matrix = []
+    inverse_document_frequency = get_inverse_document_frequency(directory)
+    for file_name in files_names:
+        term_frequency = get_term_frequency(file_name)
+        tf_id_vector = []
+        for word in inverse_document_frequency.keys():
+            if word in term_frequency.keys():
+                tf_id_vector.append(term_frequency[word] * inverse_document_frequency[word])
             else:
-                dic[word] += 1
-    liste = list_of_words(file)
-    for word in liste:
-        dic[word] = dic[word] / len(liste)
-    return dic
-
-
-def IDF_calculator(directory):
-    dic = {}
-    files_names = list_of_files(directory, "txt")
-    number_of_files = len(files_names)
-    for file in files_names:
-        list_of_all_words = list_of_words(file)
-        for word in list_of_all_words:
-            if word not in dic.keys():
-                dic[word] = 1
-            else:
-                dic[word] += 1
-    for key in dic.keys():
-        value = dic[key]
-        ratio = number_of_files / value
-        dic[key] = log10(ratio)
-    return dic
-
-
-def TF_IDF_calculator(directory):
-    files_names = list_of_files(directory, "txt")
-    matrice = []
-    IDF_scores = IDF_calculator(directory)
-    list_of_all_words = IDF_scores.keys()
-    final_list = []
-    for word in list_of_all_words:
-        final_list.append(word)
-        word_TFIDF_scores = []
-        for file in files_names:
-            if word in list_of_words(file):
-                TF_scores = TF_calculator(file)
-                word_TF_score = TF_scores[word]
-            else:
-                word_TF_score = 0
-            word_IDF_score = IDF_scores[word]
-            word_TFIDF_score = word_TF_score * word_IDF_score
-            word_TFIDF_scores.append(word_TFIDF_score)
-        matrice.append(word_TFIDF_scores)
-    return matrice, final_list
-
-
-def mots_pas_importants(matriceTF_IDF):
-    newmatrice = matriceTF_IDF[0]
-    liste_des_mots = matriceTF_IDF[1]
-    nombre_de_textes = len(newmatrice[0])
-    score_nul = [0] * nombre_de_textes
-    liste_des_mots_pas_importants = []
-    for i in range(len(newmatrice)):
-        if newmatrice[i] == score_nul:
-            liste_des_mots_pas_importants.append(liste_des_mots[i])
-    return liste_des_mots_pas_importants
-
-
-def mots_importants(matriceTF_IDF):
-    newmatrice = matriceTF_IDF[0]
-    liste_des_mots = matriceTF_IDF[1]
-    liste_des_mots_importants = newmatrice[0]
-    max = 0
-    for valeur in newmatrice[0]:
-        max += valeur
-    for i in range(len(newmatrice)):
-        somme = 0
-        for valeur in newmatrice[i]:
-            somme += valeur
-        if somme == max:
-            liste_des_mots_importants.append(liste_des_mots[i])
-        elif somme > max:
-            max = somme
-            liste_des_mots_importants = [liste_des_mots[i]]
-    return liste_des_mots_importants
-
-
-if __name__ == "__main__":
-    pass
+                tf_id_vector.append(0)
+        tf_id_matrix.append(tf_id_vector)
+    return tf_id_matrix
