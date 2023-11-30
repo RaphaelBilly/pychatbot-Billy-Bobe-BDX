@@ -30,7 +30,6 @@ def associate_president_name_with_first_name(files_names: list) -> list:
                 president_names_with_first_name.append(president_name)
     return president_names_with_first_name
 
-
 def clean_text(text: str) -> str:
     text = text.lower()
     text = re.sub(r'[^\w\s]', ' ', text) # enlève la ponctuation notamment les apostrophes et les tirets les remplace par un espace

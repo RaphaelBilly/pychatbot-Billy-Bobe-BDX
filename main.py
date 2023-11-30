@@ -1,9 +1,9 @@
+import os
 from common import get_list_of_files_in_directory
 from basic_functions import get_cleaned_speeches
-
-
+os.makedirs('cleaned', exist_ok=True)
 files_names = get_list_of_files_in_directory("./speeches")
-get_cleaned_speeches(files_names)
+
 
 # print("Menu :")
 # print("1. ")
