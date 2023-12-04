@@ -19,7 +19,7 @@ def get_term_frequency(file: str) -> dict:
             term_frequency[word] += 1
     return term_frequency
 
-print(get_term_frequency("Nomination_Chirac1.txt"))
+
 
 
 def get_inverse_document_frequency(directory: str) -> dict:
@@ -42,19 +42,61 @@ def get_inverse_document_frequency(directory: str) -> dict:
     for word in document_frequency.keys():
         inverse_document_frequency[word] = math.log10(8 / document_frequency[word])
     return inverse_document_frequency
-#print(get_inverse_document_frequency("./cleaned"))
+
 
 def get_tf_id_matrix(directory: str) -> list:
     files_names = get_list_of_files_in_directory("./cleaned")
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
-    for file_name in files_names:
-        term_frequency = get_term_frequency(file_name)
-        tf_id_vector = []
-        for word in inverse_document_frequency.keys():
-            if word in term_frequency.keys():
-                tf_id_vector.append(term_frequency[word] * inverse_document_frequency[word])
-            else:
-                tf_id_vector.append(0)
-        tf_id_matrix.append(tf_id_vector)
-    return tf_id_matrix
+    list_of_words = inverse_document_frequency.keys()
+    word_list = []
+    for word in list_of_words :
+        word_list.append(word)
+        word_idf_score = inverse_document_frequency[word]
+        word_tf_idf_scores = []
+        for file_name in files_names:
+            tf_scores = get_term_frequency(file_name)
+            if word in get_list_of_words(file_name):
+                word_tf_score = tf_scores[word]
+            else :
+                word_tf_score = 0
+            word_tf_idf_score = word_tf_score*word_idf_score
+            word_tf_idf_scores.append(word_tf_idf_score)
+        tf_id_matrix.append(word_tf_idf_scores)
+    return tf_id_matrix, word_list
+
+
+def mots_pas_importants(matrice, liste_de_mots):
+    nombre_textes = len(matrice[0])
+    score_nul = [0.0]*nombre_textes
+    mots_pas_importants = []
+    for i in range(len(matrice)):
+        if matrice[i] == score_nul :
+            mots_pas_importants.append(liste_de_mots[i])
+    return mots_pas_importants
+
+def mots_importants(matrice, liste_de_mots):
+    mots_importants = [liste_de_mots[0]]
+    score = 0
+    for i in range(len(matrice[0])):
+        score += matrice[0][i]
+    max = score
+    for i in range(1,len(matrice)):
+        score = 0
+        for j in range(len(matrice[i])):
+            score += matrice[i][j]
+        if score >= max :
+            if score > max :
+                max = score
+                mots_importants.clear()
+            mots_importants.append(liste_de_mots[i])
+    return mots_importants
+
+
+
+if __name__ == "__main__":
+    print(get_term_frequency("Nomination_Chirac1.txt"))
+    print(get_inverse_document_frequency("./cleaned"))
+    matrice, word_list = get_tf_id_matrix("./cleaned")
+    print(mots_importants(matrice, word_list))
+
