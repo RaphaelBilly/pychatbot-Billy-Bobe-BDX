@@ -1,6 +1,11 @@
 import re
 
-def extract_president_name(files_names: list) -> list:
+def extract_president_name(file_name: str) -> list:
+    president_name = re.sub(r'\d', '', file_name)
+    president_name = file_name[11:-4]
+    return president_name
+
+def extract_president_names(files_names: list) -> list:
     president_names = set()
     for file_name in files_names:
         file_name = re.sub(r'\d', '', file_name)
