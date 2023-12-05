@@ -4,6 +4,8 @@ import re
 def extract_president_name(file_name: str) -> list:
     president_name = re.sub(r'\d', '', file_name)
     president_name = file_name[11:-4]
+    if president_name[-1] == '1' or president_name[-1] == '2':
+        president_name = president_name[:-1]
     return president_name
 
 
