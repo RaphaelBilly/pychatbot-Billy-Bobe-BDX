@@ -1,9 +1,11 @@
 import re
 
+
 def extract_president_name(file_name: str) -> list:
     president_name = re.sub(r'\d', '', file_name)
     president_name = file_name[11:-4]
     return president_name
+
 
 def extract_president_names(files_names: list) -> list:
     president_names = set()
@@ -38,8 +40,9 @@ def associate_president_name_with_first_name(files_names: list) -> list:
 
 def clean_text(text: str) -> str:
     text = text.lower()
-    text = re.sub(r'[^\w\s]', ' ', text) # enlève la ponctuation notamment les apostrophes et les tirets les remplace par un espace
-    text = re.sub(r'\s+', ' ', text) # enlève les espaces multiples
+    text = re.sub(r'[^\w\s]', ' ',
+                  text)  # enlève la ponctuation notamment les apostrophes et les tirets les remplace par un espace
+    text = re.sub(r'\s+', ' ', text)  # enlève les espaces multiples
     return text
 
 
