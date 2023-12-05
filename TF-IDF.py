@@ -2,6 +2,7 @@ import math
 import os
 
 from common import get_list_of_files_in_directory
+from basic_functions import extract_president_name
 
 
 def get_list_of_words(file: str) -> list:
@@ -93,8 +94,23 @@ def mots_importants(matrice, liste_de_mots):
     return mots_importants
 
 
+def mots_repetes_par(directory, matrice, liste_mots, president):
+    liste_files = get_list_of_files_in_directory(directory)
+    liste_indices = []
+    for i in range(len(liste_files)):
+        if extract_president_name(liste_files[i]) == president :
+            liste_indices.append(i)
+    for i in range(len(liste_indices)):
+        score_tf = get_term_frequency(liste_files[liste_indices[i]])
+
+
 if __name__ == "__main__":
-    print(get_term_frequency("Nomination_Chirac1.txt"))
-    print(get_inverse_document_frequency("./cleaned"))
-    matrice, word_list = get_tf_id_matrix("./cleaned")
-    print(mots_importants(matrice, word_list))
+    directory = "./cleaned"
+    #print(get_term_frequency("Nomination_Chirac1.txt"))
+    #print(get_inverse_document_frequency("./cleaned"))
+    #matrice, word_list = get_tf_id_matrix("./cleaned")
+    #print(mots_importants(matrice, word_list))
+    liste_files = get_list_of_files_in_directory(directory)
+    print(extract_president_name(liste_files[0]))
+
+    
