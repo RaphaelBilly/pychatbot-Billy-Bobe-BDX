@@ -23,7 +23,7 @@ def get_term_frequency(file: str) -> dict:
 
 
 def get_inverse_document_frequency(directory: str) -> dict:
-    files_names = get_list_of_files_in_directory("./cleaned")
+    files_names = get_list_of_files_in_directory(directory)
     corpus_size = len(files_names)
     document_frequency = {}
     allWords = []
@@ -44,7 +44,7 @@ def get_inverse_document_frequency(directory: str) -> dict:
     return inverse_document_frequency
 
 
-def get_tf_id_matrix(directory: str) -> list:
+def get_tf_id_matrix(directory: str) -> tuple:
     files_names = get_list_of_files_in_directory("./cleaned")
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
@@ -66,7 +66,7 @@ def get_tf_id_matrix(directory: str) -> list:
     return tf_id_matrix, word_list
 
 
-def mots_pas_importants(matrice, liste_de_mots):
+def mots_pas_importants(matrice: list, liste_de_mots: list) -> list:
     nombre_textes = len(matrice[0])
     score_nul = [0.0] * nombre_textes
     mots_pas_importants = []
@@ -76,7 +76,7 @@ def mots_pas_importants(matrice, liste_de_mots):
     return mots_pas_importants
 
 
-def mots_importants(matrice, liste_de_mots):
+def mots_importants(matrice: list, liste_de_mots: list) -> list:
     mots_importants = [liste_de_mots[0]]
     score = 0
     for i in range(len(matrice[0])):
@@ -94,23 +94,82 @@ def mots_importants(matrice, liste_de_mots):
     return mots_importants
 
 
-def mots_repetes_par(directory, matrice, liste_mots, president):
-    liste_files = get_list_of_files_in_directory(directory)
-    liste_indices = []
-    for i in range(len(liste_files)):
-        if extract_president_name(liste_files[i]) == president :
-            liste_indices.append(i)
-    for i in range(len(liste_indices)):
-        score_tf = get_term_frequency(liste_files[liste_indices[i]])
+def mots_repetes_par(directory: str, president: str, mots_non_importants: list) -> list:
+    score_des_mots = []
+    liste_of_files = get_list_of_files_in_directory(directory)
+    for i in range(len(liste_of_files)):
+        if extract_president_name(liste_of_files[i]) == president:
+            score_des_mots.append(get_term_frequency(liste_of_files[i]))
+    score_global = {}
+    if len(score_des_mots) == 1:
+        score_global = score_des_mots[0]
+    else:
+        for key in score_des_mots[0].keys():
+            score_global[key] = score_des_mots[0][key]
+            if key in score_des_mots[1].keys():
+                score_global[key] += score_des_mots[1][key]
+        for key in score_des_mots[1].keys():
+            if key not in score_des_mots[0].keys():
+                score_global[key] = score_des_mots[1][key]
+    max = 0
+    liste_des_mots = []
+    for key in score_global.keys():
+        if key not in mots_non_importants:
+            if score_global[key] >= max:
+                if score_global[key] > max:
+                    max = score_global[key]
+                    liste_des_mots.clear()
+                liste_des_mots.append(key)
+    return liste_des_mots
+
+
+def president_ayant_parle_de(directory: str, mot: str) -> list:
+    liste_of_files = get_list_of_files_in_directory(directory)
+    liste_des_presidents = []
+    for file in liste_of_files:
+        liste_des_mots = get_list_of_words(file)
+        if mot in liste_des_mots:
+            nom_president = extract_president_name(file)
+            if nom_president not in liste_des_presidents:
+                liste_des_presidents.append(nom_president)
+    return liste_des_presidents
+
+
+def mots_repetes_par_tous_les_presidents(directory: str, mots_non_importants: list) -> list:
+    liste_of_files = get_list_of_files_in_directory(directory)
+    liste_des_mots = get_list_of_words(liste_of_files[0])
+    for i in range(1, len(liste_of_files)):
+        newliste = get_list_of_words(liste_of_files[i])
+        for mot in liste_des_mots:
+            if mot not in newliste:
+                liste_des_mots.remove(mot)
+    for mot in liste_des_mots:
+        if mot in mots_non_importants:
+            liste_des_mots.remove(mot)
+    return liste_des_mots
+
+
+def premier_president_ayant_parle_de(mots: list) -> str:
+    ordre_chrono = ["Nomination_Giscard dEstaing.txt", "Nomination_Mitterrand1.txt", "Nomination_Mitterrand2.txt",
+                    "Nomination_Chirac1.txt", "Nomination_Chirac2.txt", "Nomination_Sarkozy.txt",
+                    "Nomination_Hollande.txt", "Nomination_Macron.txt"]
+    for file in ordre_chrono:
+        liste_des_mots = get_list_of_words(file)
+        for mot in mots:
+            if mot in liste_des_mots:
+                return extract_president_name(file)
 
 
 if __name__ == "__main__":
     directory = "./cleaned"
-    #print(get_term_frequency("Nomination_Chirac1.txt"))
-    #print(get_inverse_document_frequency("./cleaned"))
-    #matrice, word_list = get_tf_id_matrix("./cleaned")
-    #print(mots_importants(matrice, word_list))
-    liste_files = get_list_of_files_in_directory(directory)
-    print(extract_president_name(liste_files[0]))
-
-    
+    # print(get_term_frequency("Nomination_Chirac1.txt"))
+    # print(get_inverse_document_frequency("./cleaned"))
+    # matrice, word_list = get_tf_id_matrix("./cleaned")
+    # print(mots_importants(matrice, word_list))
+    # liste_files = get_list_of_files_in_directory(directory)
+    # print(extract_president_name(liste_files[0]))
+    # mots_non_importants = mots_pas_importants(matrice, word_list)
+    # print(mots_repetes_par(directory, "Chirac", mots_non_importants))
+    # print(president_ayant_parle_de(directory, "nation"))
+    # print(mots_repetes_par_tous_les_presidents(directory, mots_non_importants))
+    print(premier_president_ayant_parle_de(["climat", "écologie"]))
