@@ -46,19 +46,23 @@ def get_inverse_document_frequency(directory: str) -> dict:
     return inverse_document_frequency
 
 
-def get_tf_id_matrix(directory: str) -> tuple:
+def get_tf_id_matrix(directory : str) -> list :
     files_names = get_list_of_files_in_directory(directory)
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
+    term_frequency_scores = []
+    for i in range(len(files_names)):
+        tf_score = get_term_frequency(files_names[i])
+        term_frequency_scores.append(tf_score)
     list_of_words = inverse_document_frequency.keys()
     word_list = []
     for word in list_of_words:
         word_list.append(word)
         word_idf_score = inverse_document_frequency[word]
         word_tf_idf_scores = []
-        for file_name in files_names:
-            tf_scores = get_term_frequency(file_name)
-            if word in get_list_of_words(file_name):
+        for i in range(len(files_names)):
+            tf_scores = term_frequency_scores[i]
+            if word in get_list_of_words(files_names[i]):
                 word_tf_score = tf_scores[word]
             else:
                 word_tf_score = 0
@@ -66,6 +70,7 @@ def get_tf_id_matrix(directory: str) -> tuple:
             word_tf_idf_scores.append(word_tf_idf_score)
         tf_id_matrix.append(word_tf_idf_scores)
     return tf_id_matrix, word_list
+
 
 
 def mots_pas_importants(matrice: list, liste_de_mots: list) -> list:
@@ -142,11 +147,13 @@ def mots_repetes_par_tous_les_presidents(directory: str, mots_non_importants: li
     liste_des_mots = get_list_of_words(liste_of_files[0])
     for i in range(1, len(liste_of_files)):
         newliste = get_list_of_words(liste_of_files[i])
-        for mot in liste_des_mots:
+        for mot in liste_des_mots.copy():
             if mot not in newliste:
                 liste_des_mots.remove(mot)
-    for mot in liste_des_mots:
-        if mot in mots_non_importants:
+    print(liste_des_mots)
+
+    for mot in mots_non_importants:
+        if mot in liste_des_mots:
             liste_des_mots.remove(mot)
     return liste_des_mots
 
@@ -163,7 +170,7 @@ def premier_president_ayant_parle_de(mots: list) -> str:
 
 
 if __name__ == "__main__":
-    directory = "./cleaned"
+    directory = "./cleaned/"
     # print(get_term_frequency("Nomination_Chirac1.txt"))
     # print(get_inverse_document_frequency("./cleaned"))
     # matrice, word_list = get_tf_id_matrix("./cleaned")
@@ -174,4 +181,9 @@ if __name__ == "__main__":
     # print(mots_repetes_par(directory, "Chirac", mots_non_importants))
     # print(president_ayant_parle_de(directory, "nation"))
     # print(mots_repetes_par_tous_les_presidents(directory, mots_non_importants))
-    print(premier_president_ayant_parle_de(["climat", "écologie"]))
+    #print(premier_president_ayant_parle_de(["climat", "écologie"]))
+    matrice, liste_de_mots = get_tf_id_matrix(directory)
+    mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
+    print(mots_pas_importants)
+    print(mots_repetes_par_tous_les_presidents(directory, mots_pas_importants))
+
