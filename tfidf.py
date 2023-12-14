@@ -22,17 +22,19 @@ def get_term_frequency(file: str) -> dict:
     return term_frequency
 
 
+
+
 def get_inverse_document_frequency(directory: str) -> dict:
     files_names = get_list_of_files_in_directory(directory)
     corpus_size = len(files_names)
     document_frequency = {}
     allWords = []
-    for i in (os.listdir(("./cleaned/"))):
+    for i in (os.listdir((directory))):
         allWords += get_list_of_words(i)
     allWords = list(set(allWords))
     for word in allWords:
-        for i in (os.listdir(("./cleaned/"))):
-            texte = open("./cleaned/" + i, "r", encoding="utf-8").read()
+        for i in (os.listdir((directory))):
+            texte = open(directory + i, "r", encoding="utf-8").read()
             if word in texte:
                 if word not in document_frequency.keys():
                     document_frequency[word] = 1
@@ -40,12 +42,12 @@ def get_inverse_document_frequency(directory: str) -> dict:
                     document_frequency[word] += 1
     inverse_document_frequency = {}
     for word in document_frequency.keys():
-        inverse_document_frequency[word] = math.log10(8 / document_frequency[word])
+        inverse_document_frequency[word] = math.log10(corpus_size / document_frequency[word])
     return inverse_document_frequency
 
 
 def get_tf_id_matrix(directory: str) -> tuple:
-    files_names = get_list_of_files_in_directory("./cleaned")
+    files_names = get_list_of_files_in_directory(directory)
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
     list_of_words = inverse_document_frequency.keys()
