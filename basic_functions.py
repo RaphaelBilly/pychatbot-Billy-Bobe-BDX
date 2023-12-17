@@ -1,4 +1,5 @@
 import re
+import os
 
 
 def extract_president_name(file_name: str) -> str:
@@ -40,8 +41,7 @@ def associate_president_name_with_first_name(files_names: list) -> list:
 
 def clean_text(text: str) -> str:
     text = text.lower()
-    text = re.sub(r'[^\w\s]', ' ',
-                  text)  # enlève la ponctuation notamment les apostrophes et les tirets les remplace par un espace
+    text = re.sub(r'[^\w\s]', ' ', text)  # enlève la ponctuation notamment les apostrophes et les tirets les remplace par un espace
     text = re.sub(r'\s+', ' ', text)  # enlève les espaces multiples
     return text
 
@@ -52,3 +52,20 @@ def get_cleaned_speeches(files_names: list):
             cleaned_text = clean_text(file.read())
             with open("./cleaned/" + filename, 'w', encoding="utf-8") as cleaned_file:
                 cleaned_file.write(cleaned_text)
+
+
+def get_question_tokenised(question: str) -> list:
+    cleaned_question = clean_text(question)
+    tokenised_question = cleaned_question.split()
+    return tokenised_question
+
+def get_questions_words_in_corpus(question: list) -> list:
+    questions_words_in_corpus = []
+    for files in os.listdir("./cleaned"):
+        with open("./cleaned/" + files, "r", encoding="utf-8") as file:
+            text = file.read()
+            for word in question:
+                if word in text:
+                    questions_words_in_corpus.append(word)
+    return set(questions_words_in_corpus)
+
