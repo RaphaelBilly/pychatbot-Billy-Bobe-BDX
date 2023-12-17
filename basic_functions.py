@@ -69,3 +69,5 @@ def get_questions_words_in_corpus(question: list) -> list:
                     questions_words_in_corpus.append(word)
     return set(questions_words_in_corpus)
 
+
+
