@@ -132,13 +132,14 @@ def mots_repetes_par(directory: str, president: str, mots_non_importants: list) 
 
 def president_ayant_parle_de(directory: str, mot: str) -> list:
     liste_of_files = get_list_of_files_in_directory(directory)
-    liste_des_presidents = []
+    liste_des_presidents = {}
     for file in liste_of_files:
         liste_des_mots = get_list_of_words(file)
         if mot in liste_des_mots:
             nom_president = extract_president_name(file)
-            if nom_president not in liste_des_presidents:
-                liste_des_presidents.append(nom_president)
+            if nom_president not in liste_des_presidents.keys():
+                liste_des_presidents[nom_president] = 0
+            liste_des_presidents[nom_president] += 1
     return liste_des_presidents
 
 
@@ -274,33 +275,4 @@ def get_refined_answer(tokenised_question, answer):
 
 if __name__ == "__main__":
     directory = "./cleaned/"
-    # print(get_term_frequency("Nomination_Chirac1.txt"))
-    # print(get_inverse_document_frequency("./cleaned"))
-    # matrice, word_list = get_tf_id_matrix("./cleaned")
-    # print(mots_importants(matrice, word_list))
-    # liste_files = get_list_of_files_in_directory(directory)
-    # print(extract_president_name(liste_files[0]))
-    # mots_non_importants = mots_pas_importants(matrice, word_list)
-    # print(mots_repetes_par(directory, "Chirac", mots_non_importants))
-    # print(president_ayant_parle_de(directory, "nation"))
-    # print(mots_repetes_par_tous_les_presidents(directory, mots_non_importants))
-    # print(premier_president_ayant_parle_de(["climat", "écologie"]))
-    matrice, liste_de_mots = get_tf_id_matrix(directory)
-    # mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
-    # print(mots_repetes_par_tous_les_presidents(directory, mots_pas_importants))
-    # newMatrice = get_tf_id_matrix2(matrice)
-    # print(len(newMatrice))
-    # print(len(newMatrice[0]))
-    question = "Pourquoi une nation peut-elle prendre soin du climat ?"
-    question = get_question_tokenised(question)
-    question_in_corpus= get_questions_words_in_corpus(question)
-    vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
-    matrice = get_tf_id_matrix2(matrice)
-    #print(get_scalar_product(matrice[1], matrice[2]))
-    #print(get_vector_norm(matrice[1]))
-    #print(get_similarity(matrice[1], matrice[2]))
-    document = get_most_relevant_document(matrice,vector,directory)
-    mot = get_most_revelant_word(vector, liste_de_mots)
-    answer = get_answer(mot, document)
-    print(answer)
-    print(get_refined_answer(question,answer))
+
