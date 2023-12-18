@@ -1,8 +1,6 @@
 import math
-import os
 from common import get_list_of_files_in_directory
-from basic_functions import extract_president_name, get_question_tokenised, get_questions_words_in_corpus
-
+from basic_functions import *
 
 def get_list_of_words(file: str) -> list:
     file = open("./cleaned/" + file, "r", encoding="utf-8")
@@ -30,12 +28,14 @@ def get_inverse_document_frequency(directory: str) -> dict:
     corpus_size = len(files_names)
     document_frequency = {}
     allWords = []
-    for i in (os.listdir((directory))):
-        allWords += get_list_of_words(i)
+    liste_totale = []
+    for i in range(len(files_names)):
+        liste = get_list_of_words(files_names[i])
+        allWords += liste
+        liste_totale.append(liste)
     allWords = list(set(allWords))
     for word in allWords:
-        for i in (os.listdir((directory))):
-            texte = open(directory + i, "r", encoding="utf-8").read()
+        for texte in liste_totale:
             if word in texte:
                 if word not in document_frequency.keys():
                     document_frequency[word] = 1
@@ -231,6 +231,7 @@ def get_most_relevant_document(matrice: list,question_vector: list,directory:str
     for i in range(len(matrice)):
         liste_des_scores.append(get_similarity(matrice[i],question_vector))
     max = 0
+    indice = 0
     for _ in range(len(liste_des_scores)):
         if liste_des_scores[_]>= max :
             max = liste_des_scores[_]
@@ -238,9 +239,27 @@ def get_most_relevant_document(matrice: list,question_vector: list,directory:str
     return liste_of_files[indice]
 
 
+def get_most_revelant_word(vector : list, list_of_words : list) -> str :
+    max = 0
+    mot = ""
+    for i in range (len(vector)):
+        if vector[i] >= max:
+            max = vector[i]
+            mot = list_of_words[i]
+    return mot
 
-
-
+def get_answer(word : str, file : str) -> str :
+    lines = open("./speeches/" + file, "r", encoding="utf-8").readlines()
+    for i in range(len(lines)):
+        lines[i] = clean_text(lines[i])
+        lines[i] = lines[i].split(" ")
+    for line in lines :
+        if word in line:
+            answer = ""
+            for element in line:
+                answer += element + ' '
+            answer = (answer[:-1])
+            return answer
 
 
 if __name__ == "__main__":
@@ -262,7 +281,7 @@ if __name__ == "__main__":
     # newMatrice = get_tf_id_matrix2(matrice)
     # print(len(newMatrice))
     # print(len(newMatrice[0]))
-    question = "Quelle est la politique de la France en matière de climat ?"
+    question = "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
     question = get_question_tokenised(question)
     question_in_corpus= get_questions_words_in_corpus(question)
     vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
@@ -270,4 +289,6 @@ if __name__ == "__main__":
     #print(get_scalar_product(matrice[1], matrice[2]))
     #print(get_vector_norm(matrice[1]))
     #print(get_similarity(matrice[1], matrice[2]))
-    print(get_most_relevant_document(matrice,vector,directory))
+    document = get_most_relevant_document(matrice,vector,directory)
+    mot = get_most_revelant_word(vector, liste_de_mots)
+    print(get_answer(mot, document))
