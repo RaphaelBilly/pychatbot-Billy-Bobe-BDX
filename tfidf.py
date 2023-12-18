@@ -7,13 +7,17 @@ from basic_functions import extract_president_name
 
 def get_list_of_words(file: str) -> list:
     file = open("./cleaned/" + file, "r", encoding="utf-8")
-    return list(set(file.read().split(" ")[:-1]))
+    list_of_words = list(set(file.read().split(" ")[:-1]))
+    if '' in list_of_words:
+        list_of_words.remove('')
+    return list_of_words
 
 
 def get_term_frequency(file: str) -> dict:
-    list_of_words = get_list_of_words(file)
     term_frequency = {}
     fileLines = open("./cleaned/" + file, "r", encoding="utf-8").read().split(" ")
+    if '' in fileLines:
+        fileLines.remove('')
     for word in fileLines:
         if word not in term_frequency.keys():
             term_frequency[word] = 1
@@ -44,7 +48,7 @@ def get_inverse_document_frequency(directory: str) -> dict:
     return inverse_document_frequency
 
 
-def get_tf_id_matrix(directory: str) -> list:
+def get_tf_id_matrix(directory: str) -> tuple:
     files_names = get_list_of_files_in_directory(directory)
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
@@ -176,7 +180,7 @@ def get_tf_id_matrix2(matrix: list) -> list:
     return newMatrix
 
 
-def get_question_tf_score(question : list) -> dict:
+def get_question_tf_score(question: list) -> dict:
     tf_scores = {}
     for word in question:
         if word not in tf_scores.keys():
@@ -184,18 +188,44 @@ def get_question_tf_score(question : list) -> dict:
         tf_scores[word] += 1
     return tf_scores
 
-def get_tf_id_vector(question : list, list_of_words : list, directory : str) -> list:
+
+def get_tf_id_vector(question: list, list_of_words: list, directory: str) -> list:
     idf_score = get_inverse_document_frequency(directory)
     question_tf_score = get_question_tf_score(question)
     tf_id_scores = []
     for word in list_of_words:
-        if word in question :
+        if word in question:
             tf_score = question_tf_score[word]
             tf_id_score = tf_score * idf_score[word]
-        else :
+        else:
             tf_id_score = 0
         tf_id_scores.append(tf_id_score)
     return tf_id_scores
+
+
+def get_scalar_product(vector1: list, vector2: list) -> float:
+    sum = 0
+    for i in range(len(vector1)):
+        value = vector1[i] * vector2[i]
+        sum += value
+    return sum
+
+
+def get_vector_norm(vector: list) -> float:
+    norm = 0
+    for i in range(len(vector)):
+        value = vector[i] ** 2
+        norm += value
+    norm = math.sqrt(norm)
+    return norm
+
+
+def get_similarity(vector1: list, vector2: list) -> float:
+    scalar_product = get_scalar_product(vector1, vector2)
+    norm1 = get_vector_norm(vector1)
+    norm2 = get_vector_norm(vector2)
+    return scalar_product / (norm1 * norm2)
+
 
 if __name__ == "__main__":
     directory = "./cleaned/"
@@ -211,12 +241,14 @@ if __name__ == "__main__":
     # print(mots_repetes_par_tous_les_presidents(directory, mots_non_importants))
     # print(premier_president_ayant_parle_de(["climat", "écologie"]))
     matrice, liste_de_mots = get_tf_id_matrix(directory)
-    #mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
-    # print(mots_pas_importants)
+    # mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
     # print(mots_repetes_par_tous_les_presidents(directory, mots_pas_importants))
-    #newMatrice = get_tf_id_matrix2(matrice)
-    #print(len(newMatrice))
-    #print(len(newMatrice[0]))
+    # newMatrice = get_tf_id_matrix2(matrice)
+    # print(len(newMatrice))
+    # print(len(newMatrice[0]))
     question = ["qui", "est", "le", "président", "français", "qui", "doit", "être", "le", "plus", "connu"]
     vector = get_tf_id_vector(question, liste_de_mots, directory)
-    print(len(vector))
+    matrice = get_tf_id_matrix2(matrice)
+    print(get_scalar_product(matrice[1], matrice[2]))
+    print(get_vector_norm(matrice[1]))
+    print(get_similarity(matrice[1], matrice[2]))
