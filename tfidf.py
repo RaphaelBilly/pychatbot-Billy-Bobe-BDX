@@ -269,8 +269,7 @@ def get_refined_answer(tokenised_question, answer):
     }
     for i in tokenised_question:
         if i in question_starters.keys():
-            print(question_starters[i] + answer)
-            return answer
+            return (question_starters[i] + answer[:-1] + '.')
 
 
 if __name__ == "__main__":
@@ -292,16 +291,16 @@ if __name__ == "__main__":
     # newMatrice = get_tf_id_matrix2(matrice)
     # print(len(newMatrice))
     # print(len(newMatrice[0]))
-    #question = "Pourquoi comment une nation peut-elle prendre soin du climat ?"
-    #question = get_question_tokenised(question)
-    #question_in_corpus= get_questions_words_in_corpus(question)
-    #vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
-    #matrice = get_tf_id_matrix2(matrice)
+    question = "Pourquoi une nation peut-elle prendre soin du climat ?"
+    question = get_question_tokenised(question)
+    question_in_corpus= get_questions_words_in_corpus(question)
+    vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
+    matrice = get_tf_id_matrix2(matrice)
     #print(get_scalar_product(matrice[1], matrice[2]))
     #print(get_vector_norm(matrice[1]))
     #print(get_similarity(matrice[1], matrice[2]))
-    #document = get_most_relevant_document(matrice,vector,directory)
-    #mot = get_most_revelant_word(vector, liste_de_mots)
-    #answer = get_answer(mot, document)
-    #print(answer)
-    #print(get_refined_answer(question,answer))
+    document = get_most_relevant_document(matrice,vector,directory)
+    mot = get_most_revelant_word(vector, liste_de_mots)
+    answer = get_answer(mot, document)
+    print(answer)
+    print(get_refined_answer(question,answer))

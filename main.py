@@ -57,7 +57,16 @@ if choix == 1:
              print("You chose 6")
 
 elif choix ==2 :
-    user_question = input("Quelle est votre question ?")
+    directory="./cleaned"
+    question = input("Quelle est votre question ?")
+    question = get_question_tokenised(question)
+    question_in_corpus = get_questions_words_in_corpus(question)
+    matrice, liste_de_mots = get_tf_id_matrix(directory)
+    matrice = get_tf_id_matrix2(matrice)
+    vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
+    mot = get_most_revelant_word(vector, liste_de_mots)
+    document = get_most_relevant_document(matrice, vector, directory)
+    answer = get_answer(mot, document)
 
-    #print(get_question_tokenised(user_question))
-    # test : print(get_questions_words_in_corpus(get_question_tokenised("Quel est le président qui a le plus parlé de l'écologie ?")))
+    print(get_refined_answer(question, answer))
+
