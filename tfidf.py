@@ -22,8 +22,6 @@ def get_term_frequency(file: str) -> dict:
     return term_frequency
 
 
-
-
 def get_inverse_document_frequency(directory: str) -> dict:
     files_names = get_list_of_files_in_directory(directory)
     corpus_size = len(files_names)
@@ -46,7 +44,7 @@ def get_inverse_document_frequency(directory: str) -> dict:
     return inverse_document_frequency
 
 
-def get_tf_id_matrix(directory : str) -> list :
+def get_tf_id_matrix(directory: str) -> list:
     files_names = get_list_of_files_in_directory(directory)
     tf_id_matrix = []
     inverse_document_frequency = get_inverse_document_frequency(directory)
@@ -70,7 +68,6 @@ def get_tf_id_matrix(directory : str) -> list :
             word_tf_idf_scores.append(word_tf_idf_score)
         tf_id_matrix.append(word_tf_idf_scores)
     return tf_id_matrix, word_list
-
 
 
 def mots_pas_importants(matrice: list, liste_de_mots: list) -> list:
@@ -169,6 +166,37 @@ def premier_president_ayant_parle_de(mots: list) -> str:
                 return extract_president_name(file)
 
 
+def get_tf_id_matrix2(matrix: list) -> list:
+    newMatrix = []
+    for i in range(len(matrix[0])):
+        newLine = []
+        for j in range(len(matrix)):
+            newLine.append(matrix[j][i])
+        newMatrix.append(newLine)
+    return newMatrix
+
+
+def get_question_tf_score(question : list) -> dict:
+    tf_scores = {}
+    for word in question:
+        if word not in tf_scores.keys():
+            tf_scores[word] = 0
+        tf_scores[word] += 1
+    return tf_scores
+
+def get_tf_id_vector(question : list, list_of_words : list, directory : str) -> list:
+    idf_score = get_inverse_document_frequency(directory)
+    question_tf_score = get_question_tf_score(question)
+    tf_id_scores = []
+    for word in list_of_words:
+        if word in question :
+            tf_score = question_tf_score[word]
+            tf_id_score = tf_score * idf_score[word]
+        else :
+            tf_id_score = 0
+        tf_id_scores.append(tf_id_score)
+    return tf_id_scores
+
 if __name__ == "__main__":
     directory = "./cleaned/"
     # print(get_term_frequency("Nomination_Chirac1.txt"))
@@ -181,9 +209,14 @@ if __name__ == "__main__":
     # print(mots_repetes_par(directory, "Chirac", mots_non_importants))
     # print(president_ayant_parle_de(directory, "nation"))
     # print(mots_repetes_par_tous_les_presidents(directory, mots_non_importants))
-    #print(premier_president_ayant_parle_de(["climat", "écologie"]))
+    # print(premier_president_ayant_parle_de(["climat", "écologie"]))
     matrice, liste_de_mots = get_tf_id_matrix(directory)
-    mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
-    print(mots_pas_importants)
-    print(mots_repetes_par_tous_les_presidents(directory, mots_pas_importants))
-
+    #mots_pas_importants = mots_pas_importants(matrice, liste_de_mots)
+    # print(mots_pas_importants)
+    # print(mots_repetes_par_tous_les_presidents(directory, mots_pas_importants))
+    #newMatrice = get_tf_id_matrix2(matrice)
+    #print(len(newMatrice))
+    #print(len(newMatrice[0]))
+    question = ["qui", "est", "le", "président", "français", "qui", "doit", "être", "le", "plus", "connu"]
+    vector = get_tf_id_vector(question, liste_de_mots, directory)
+    print(len(vector))
