@@ -1,8 +1,7 @@
 import math
 import os
-
 from common import get_list_of_files_in_directory
-from basic_functions import extract_president_name
+from basic_functions import extract_president_name, get_question_tokenised, get_questions_words_in_corpus
 
 
 def get_list_of_words(file: str) -> list:
@@ -226,6 +225,23 @@ def get_similarity(vector1: list, vector2: list) -> float:
     norm2 = get_vector_norm(vector2)
     return scalar_product / (norm1 * norm2)
 
+def get_most_relevant_document(matrice: list,question_vector: list,directory:str) -> str:
+    liste_of_files = get_list_of_files_in_directory(directory)
+    liste_des_scores = []
+    for i in range(len(matrice)):
+        liste_des_scores.append(get_similarity(matrice[i],question_vector))
+    max = 0
+    for _ in range(len(liste_des_scores)):
+        if liste_des_scores[_]>= max :
+            max = liste_des_scores[_]
+            indice = _
+    return liste_of_files[indice]
+
+
+
+
+
+
 
 if __name__ == "__main__":
     directory = "./cleaned/"
@@ -246,9 +262,12 @@ if __name__ == "__main__":
     # newMatrice = get_tf_id_matrix2(matrice)
     # print(len(newMatrice))
     # print(len(newMatrice[0]))
-    question = ["qui", "est", "le", "président", "français", "qui", "doit", "être", "le", "plus", "connu"]
-    vector = get_tf_id_vector(question, liste_de_mots, directory)
+    question = "Quelle est la politique de la France en matière de climat ?"
+    question = get_question_tokenised(question)
+    question_in_corpus= get_questions_words_in_corpus(question)
+    vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
     matrice = get_tf_id_matrix2(matrice)
-    print(get_scalar_product(matrice[1], matrice[2]))
-    print(get_vector_norm(matrice[1]))
-    print(get_similarity(matrice[1], matrice[2]))
+    #print(get_scalar_product(matrice[1], matrice[2]))
+    #print(get_vector_norm(matrice[1]))
+    #print(get_similarity(matrice[1], matrice[2]))
+    print(get_most_relevant_document(matrice,vector,directory))

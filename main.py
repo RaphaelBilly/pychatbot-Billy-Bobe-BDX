@@ -3,16 +3,17 @@ from common import get_list_of_files_in_directory
 from basic_functions import *
 from tfidf import *
 
-#test : print(get_questions_words_in_corpus(get_question_tokenised("Quel est le président qui a le plus parlé de l'écologie ?")))
 
 files_names = get_list_of_files_in_directory("./speeches")
 get_cleaned_speeches(files_names)
+
 
 print("Menu :")
 print("1. Souhaitez vous accéder aux fonctionnalités prédéfénies du menu ?")
 print("2. Souhaitez vous poser une question ?")
 choix = int(input("Entrer votre choix [1-2]: "))
 if choix == 1:
+    print("Menu :")
     print("1. Afficher la liste des mots les moins importants dans le corpus de documents.")
     print("2. Afficher le(s) mot(s) ayant le score TD-IDF le plus élevé")
     print("3. Indiquer le(s) mot(s) le(s) plus répété(s) par le président souhaité")
@@ -58,4 +59,5 @@ if choix == 1:
 elif choix ==2 :
     user_question = input("Quelle est votre question ?")
 
-    print(get_question_tokenised(user_question))
+    #print(get_question_tokenised(user_question))
+    # test : print(get_questions_words_in_corpus(get_question_tokenised("Quel est le président qui a le plus parlé de l'écologie ?")))
