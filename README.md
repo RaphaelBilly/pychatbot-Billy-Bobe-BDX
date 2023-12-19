@@ -3,12 +3,11 @@ CHATBOT
 README 
 ------
 **Membres du projet :**
-
 Raphaël Billy
+
 Louis BOBE
 
 **lien vers le projet du github**
-
 https://github.com/RaphaelBilly/pychatbot-Billy-Bobe-BDX
 
 **Instructions d'éxecution du code**
