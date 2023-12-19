@@ -41,7 +41,7 @@ if choix == 1:
              president = input("Ecris le nom du président: ")
              liste = mots_repetes_par(directory, president, mots_pas_importants(matrice, liste_de_mots))
              if len(liste) == 1:
-                print("Le mot que M." + president + "a le plus répété est : " + liste[0] + ".")
+                print("Le mot que M." + president + " a le plus répété est : " + liste[0] + ".")
              else :
                 for i in range(len(liste)):
                     if i == len(liste) -1:
