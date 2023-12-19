@@ -3,7 +3,7 @@ CHATBOT
 README 
 ------
 **Membres du projet :**
-Raphaël Billy
+Raphaël Billy &
 
 Louis BOBE
 
