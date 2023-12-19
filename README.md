@@ -3,13 +3,16 @@ CHATBOT
 README 
 ------
 **Membres du projet :**
+
 Raphaël Billy
 Louis BOBE
 
 **lien vers le projet du github**
+
 https://github.com/RaphaelBilly/pychatbot-Billy-Bobe-BDX
 
 **Instructions d'éxecution du code**
+
 Une fois tous les dossiers installés dans un même fichier, exécuter main.py. 
 Vous aurez le choix entre 
 - utiliser les fonctions de base (partie 1 du projet) : cliquer sur 1
