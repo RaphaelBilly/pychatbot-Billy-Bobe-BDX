@@ -67,4 +67,4 @@ def get_questions_words_in_corpus(question: list) -> list:
             for word in question:
                 if word in text:
                     questions_words_in_corpus.append(word)
-    return set(questions_words_in_corpus)
+    return list(set(questions_words_in_corpus))
