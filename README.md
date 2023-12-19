@@ -7,10 +7,10 @@ README
 Raphaël Billy &
 Louis BOBE
 
-**lien vers le projet du github**
-https://github.com/RaphaelBilly/pychatbot-Billy-Bobe-BDX
+**lien vers le projet du github :**
+ https://github.com/RaphaelBilly/pychatbot-Billy-Bobe-BDX
 
-**Instructions d'éxecution du code**
+**Instructions d'éxecution du code :**
 
 Une fois tous les dossiers installés dans un même fichier, exécuter main.py. 
 Vous aurez le choix entre 
