@@ -12,7 +12,7 @@ Vous aurez le choix entre
   - utiliser les fonctions de base (partie 1 du projet) : cliquer sur 1
   - accéder au mode chatbot permettant à l'utilisateur de poser une question : cliquer sur 2
 
-Si vous avez cliqué sur 1 vous avez le choix entre 5 fonctionnalités parmis les suivantes :
+Si vous avez cliqué sur 1 vous avez le choix entre 5 fonctionnalités parmi les suivantes :
   1. Afficher la liste des mots les moins importants dans le corpus de documents.
   2. Afficher le(s) mot(s) ayant le score TD-IDF le plus élevé
   3. Indiquer le(s) mot(s) le(s) plus répété(s) par le président souhaité
