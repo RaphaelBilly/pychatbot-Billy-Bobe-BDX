@@ -268,9 +268,13 @@ def get_refined_answer(tokenised_question, answer):
         "pourquoi": "Car, ",
         "peux tu": "Oui, bien sûr"
     }
+    if answer == "None" :
+        return("Je ne suis pas en mesure de répondre à cette question...")
     for i in tokenised_question:
         if i in question_starters.keys():
             return (question_starters[i] + answer[:-1] + '.')
+    answer = answer[0].upper() + answer[1:]
+    return answer
 
 
 if __name__ == "__main__":
