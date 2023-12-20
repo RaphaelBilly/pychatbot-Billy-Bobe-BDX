@@ -273,7 +273,7 @@ def get_refined_answer(tokenised_question, answer):
     for i in tokenised_question:
         if i in question_starters.keys():
             return (question_starters[i] + answer[:-1] + '.')
-    answer = answer[0].upper() + answer[1:]
+    answer = answer[0].upper() + answer[1:] + '.'
     return answer
 
 
