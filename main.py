@@ -83,9 +83,11 @@ elif choix ==2 :
     matrice, liste_de_mots = get_tf_id_matrix(directory)
     matrice = get_tf_id_matrix2(matrice)
     vector = get_tf_id_vector(question_in_corpus, liste_de_mots, directory)
-    mot = get_most_revelant_word(vector, liste_de_mots)
-    document = get_most_relevant_document(matrice, vector, directory)
-    answer = get_answer(mot, document)
-
-    print(get_refined_answer(question, answer))
+    if get_vector_norm(vector) == 0:
+        print("Désolé, mais nous ne somme pas en mesure de répondre à votre question...")
+    else:
+        mot = get_most_revelant_word(vector, liste_de_mots)
+        document = get_most_relevant_document(matrice, vector, directory)
+        answer = get_answer(mot, document)
+        print(get_refined_answer(question, answer))
 
